@@ -10,10 +10,20 @@ namespace ConsoleUI
         static void Main(string[] args)
         {
             CarManager carManager = new CarManager(new EfCarDal());
-            foreach (var car in carManager.GetCarDetails())
+            var result = carManager.GetCarDetails();
+            if (result.Success)
             {
-                Console.WriteLine(car.Description + " -- " + car.ColorName+" -- "+ car.BrandName);
+                foreach (var car in carManager.GetCarDetails().Data)
+                {
+                    Console.WriteLine(car.Description + " -- " + car.ColorName + " -- " + car.BrandName);
+                }
             }
+            else
+            {
+                Console.WriteLine(result.Message);
+            }
+            
+            
             
         }
     }
