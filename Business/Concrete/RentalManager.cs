@@ -26,27 +26,30 @@ namespace Business.Concrete
                 return new ErrorResult(Messages.CarNotAvailable);
             }
             _rentalDal.Add(rental);
-            return new SuccessResult();
+            return new SuccessResult(Messages.Added);
         }
 
         public IResult Delete(Rental rental)
         {
-            throw new NotImplementedException();
+            _rentalDal.GetAll(rn => rn.RentalId == rental.RentalId);
+            _rentalDal.Delete(rental);
+            return new SuccessResult(Messages.Deleted);
         }
 
         public IDataResult<List<Rental>> GetAll()
         {
-            throw new NotImplementedException();
+            return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll());
         }
 
         public IDataResult<List<Rental>> GeyById(int rentalId)
         {
-            throw new NotImplementedException();
+            return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(rn=>rn.RentalId == rentalId));
         }
 
         public IResult Update(Rental rental)
         {
-            throw new NotImplementedException();
+            _rentalDal.Update(rental);
+            return new SuccessResult(Messages.Updated);
         }
     }
 }

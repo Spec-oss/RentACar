@@ -33,12 +33,13 @@ namespace Business.Concrete
 
         public IResult Delete(Car car)
         {
-            return new SuccessResult();
+            _carDal.GetAll(c => c.CarId == car.CarId);
+            _carDal.Delete(car);
+            return new SuccessResult(Messages.Deleted);
         }
 
         public IDataResult<List<Car>> GetAll()
         {
-            //İş kodları
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(),Messages.CarsListed);
         }
 
@@ -59,7 +60,8 @@ namespace Business.Concrete
 
         public IResult Update(Car car)
         {
-            return new SuccessResult();
+            _carDal.Update(car);
+            return new SuccessResult(Messages.Updated);
         }
     }
 }
