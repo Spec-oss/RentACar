@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Core.Entity.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.Constans
+namespace Business.Constants
 {
     public class Messages
     {
@@ -16,6 +18,12 @@ namespace Business.Constans
         public static string Added = "Eklenmiştir";
         public static string Deleted = "Silinmiştir";
         public static string Updated = "Güncellenmiştir";
-        
+        public static string AuthorizationDenied= "Yetkisiz Giriş";
+        public static string UserRegistered= "Kullanıcı Kayıt Oldu.";
+        public static string UserAlreadyExists ="Kullanıcı Zaten Mevcut.";
+        public static string UserNotFound= "Kullanıcı Bulunamadı";
+        public static string AccessTokenCreated= "Token Oluşturuldu";
+        public static string SuccessfulLogin ="Giriş Başarılı";
+        public static string PasswordError ="Şifre Hatalı";
     }
 }
