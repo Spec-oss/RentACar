@@ -24,14 +24,14 @@ namespace Business.Concrete
         {
             _carDal = carDal;
         }
-        [SecuredOperation("car.add,admin")]
+        [SecuredOperation("systemadmin,admin")]
         [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
         {
             _carDal.Add(car);
             return new SuccessResult(Messages.CarAdded);
         }
-
+        [SecuredOperation("systemadmin")]
         public IResult Delete(Car car)
         {
             _carDal.GetAll(c => c.CarId == car.CarId);
