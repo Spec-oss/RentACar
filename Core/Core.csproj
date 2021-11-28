@@ -14,10 +14,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.10" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="CrossCuttingConcerns\Caching\Redis\" />
+    <PackageReference Include="ServiceStack.Redis" Version="5.13.2" />
+    <PackageReference Include="StackExchange.Redis" Version="2.2.88" />
   </ItemGroup>
 
 </Project>
