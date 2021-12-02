@@ -8,12 +8,8 @@ using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
-    public interface IColorService
+    public interface IColorService:IEntityService<Color>
     {
-        IDataResult<List<Color>> GetAll();
-        IDataResult<List<Color>> GeyById(int colorId);
-        IResult Add(Color color);
-        IResult Delete(Color color);
-        IResult Update(Color color);
+       
     }
 }

@@ -33,14 +33,25 @@ namespace Business.Concrete
             return new SuccessResult(Messages.Deleted);
         }
 
+        public IDataResult<Color> FindByID(int id)
+        {
+            Color color = new Color();
+            if (_colorDal.GetAll().Any(cl => cl.ColorId == id))
+            {
+                color = _colorDal.GetAll().FirstOrDefault(cl => cl.ColorId == id);
+            }
+            else Console.WriteLine("No such color was found.");
+            return new SuccessDataResult<Color>(color);
+        }
+
+        public IDataResult<Color> Get(Color color)
+        {
+            return new SuccessDataResult<Color>(_colorDal.Get(cl => cl.ColorId == color.ColorId));
+        }
+
         public IDataResult<List<Color>> GetAll()
         {
             return new SuccessDataResult<List<Color>>(_colorDal.GetAll());
-        }
-
-        public IDataResult<List<Color>> GeyById(int colorId)
-        {
-            return new SuccessDataResult<List<Color>>(_colorDal.GetAll(cl => cl.ColorId == colorId));
         }
 
         public IResult Update(Color color)

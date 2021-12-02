@@ -25,5 +25,8 @@ namespace Business.Constants
         public static string AccessTokenCreated= "Token Oluşturuldu";
         public static string SuccessfulLogin ="Giriş Başarılı";
         public static string PasswordError ="Şifre Hatalı";
+        public static string CustomerNotExist= "Kullanıcı Bulunamadı";
+        public static string NotEngouhFindex = "Findeks Puanı Yeterli Değil";
+        public static string EngouhFindex = "Findeks Puanı Yeterli";
     }
 }

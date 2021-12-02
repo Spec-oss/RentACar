@@ -47,7 +47,12 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.CarsListed);
         }
 
-        public IDataResult<List<CarDetailDto>> GetCarDetails()
+        public IDataResult<List<Car>> GetByDailyPrice(decimal min, decimal max)
+        {
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.DailyPrice >= min && c.DailyPrice <= max));
+        }
+
+        public IDataResult<List<CarDetailDto>> GetCarDetails(int id)
         {
             return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(), Messages.CarsListed);
         }
@@ -66,6 +71,26 @@ namespace Business.Concrete
         {
             _carDal.Update(car);
             return new SuccessResult(Messages.Updated);
+        }
+        public IDataResult<List<CarDetailDto>> GetAllCarDetailsByFilter(int brandId, int colorId)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails().Where(c => c.BrandId == brandId && c.ColorId == colorId).ToList());
+        }
+
+        public IDataResult<Car> FindByID(int id)
+        {
+            Car car = new Car();
+            if (_carDal.GetAll().Any(c => c.CarId == id))
+            {
+                car = _carDal.GetAll().FirstOrDefault(c => c.CarId == id);
+            }
+            else Console.WriteLine("No such car was found.");
+            return new SuccessDataResult<Car>(car);
+        }
+
+        public IDataResult<Car> Get(Car car)
+        {
+            return new SuccessDataResult<Car>(_carDal.Get(c => c.CarId == car.CarId));
         }
     }
 }

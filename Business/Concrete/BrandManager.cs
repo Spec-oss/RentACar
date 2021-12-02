@@ -32,6 +32,22 @@ namespace Business.Concrete
             return new SuccessResult(Messages.Deleted);
         }
 
+        public IDataResult<Brand> FindByID(int id)
+        {
+            Brand brand = new Brand();
+            if (_brandDal.GetAll().Any(b => b.BrandId == id))
+            {
+                brand = _brandDal.GetAll().FirstOrDefault(b => b.BrandId == id);
+            }
+            else Console.WriteLine("No such brand was found.");
+            return new SuccessDataResult<Brand>(brand);
+        }
+
+        public IDataResult<Brand> Get(Brand brand)
+        {
+            return new SuccessDataResult<Brand>(_brandDal.Get(b => b.BrandId == brand.BrandId));
+        }
+
         public IDataResult<List<Brand>> GetAll()
         {
             return new SuccessDataResult<List<Brand>>(_brandDal.GetAll());

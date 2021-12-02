@@ -1,5 +1,6 @@
 ﻿using Core.Utilities.Results;
 using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +9,9 @@ using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
-    public interface IRentalService
+    public interface IRentalService:IEntityService<Rental>
     {
-        IDataResult<List<Rental>> GetAll();
-        IDataResult<List<Rental>> GeyById(int rentalId);
-        IResult Add(Rental rental);
-        IResult Delete(Rental rental);
-        IResult Update(Rental rental);
+        IDataResult<List<RentalDetailDto>> GetRentalDetails();
+        IResult CheckIfFindeks(int carId, int customerId);
     }
 }
