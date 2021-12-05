@@ -11,18 +11,18 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CarsController : ControllerBase
+    public class CustomersController : ControllerBase
     {
-        ICarService _carService;
-        public CarsController(ICarService carService)
+        ICustomerService _customerService;
+        public CustomersController(ICustomerService customerService)
         {
-            _carService = carService;
+            _customerService = customerService;
         }
 
         [HttpGet("getall")]
         public IActionResult Get()
         {
-            var result = _carService.GetAll();
+            var result = _customerService.GetAll();
             if (result.Success)
             {
                 return Ok(result);
@@ -31,9 +31,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("add")]
-        public IActionResult Add(Car car)
+        public IActionResult Add(Customer customer)
         {
-            var result = _carService.Add(car);
+            var result = _customerService.Add(customer);
             if (result.Success)
             {
                 return Ok(result);
@@ -42,9 +42,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("delete")]
-        public IActionResult Delete(Car car)
+        public IActionResult Delete(Customer customer)
         {
-            var result = _carService.Delete(car);
+            var result = _customerService.Delete(customer);
             if (result.Success)
             {
                 return Ok(result);
@@ -53,42 +53,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("update")]
-        public IActionResult Update(Car car)
+        public IActionResult Update(Customer customer)
         {
-            var result = _carService.Update(car);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
-        [HttpGet("getcardetails")]
-        public IActionResult GetCarDetails(int carId)
-        {
-            var result = _carService.GetCarDetails(carId);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
-        [HttpGet("getcarsbybrandid")]
-        public IActionResult GetCarsByBrandId(int brandId)
-        {
-            var result = _carService.GetCarDetails(brandId);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
-        [HttpGet("getcarsbycolorid")]
-        public IActionResult GetCarsByColorId(int colorId)
-        {
-            var result = _carService.GetCarDetails(colorId);
+            var result = _customerService.Update(customer);
             if (result.Success)
             {
                 return Ok(result);
@@ -97,9 +64,31 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getbyid")]
-        public IActionResult FindById(int carId)
+        public IActionResult FindById(int id)
         {
-            var result = _carService.FindById(carId);
+            var result = _customerService.FindById(id);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("getcustomerdetalbymail")]
+        public IActionResult GetCustomerDetailByMail(string mail)
+        {
+            var result = _customerService.GetCustomerDetailByMail(mail);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("getcustomerdetail")]
+        public IActionResult GetCustomerDetails()
+        {
+            var result = _customerService.GetCustomerDetails();
             if (result.Success)
             {
                 return Ok(result);

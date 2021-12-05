@@ -14,6 +14,6 @@ namespace Business.Abstract
         IResult Add(T entity);
         IResult Delete(T entity);
         IResult Update(T entity);
-        IDataResult<T> FindByID(int Id);
+        IDataResult<T> FindById(int Id);
     }
 }

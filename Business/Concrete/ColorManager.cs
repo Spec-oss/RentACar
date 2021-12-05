@@ -33,7 +33,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.Deleted);
         }
 
-        public IDataResult<Color> FindByID(int id)
+        public IDataResult<Color> FindById(int id)
         {
             Color color = new Color();
             if (_colorDal.GetAll().Any(cl => cl.ColorId == id))

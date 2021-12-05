@@ -42,7 +42,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.Deleted);
         }
 
-        public IDataResult<Rental> FindByID(int id)
+        public IDataResult<Rental> FindById(int id)
         {
             Rental rental = new Rental();
             if (_rentalDal.GetAll().Any(r=>r.RentalId==id))
@@ -76,8 +76,8 @@ namespace Business.Concrete
 
         public IResult CheckIfFindeks(int carId, int customerId)
         {
-            var customer = _customerService.FindByID(customerId).Data;
-            var car = _carService.FindByID(carId).Data;
+            var customer = _customerService.FindById(customerId).Data;
+            var car = _carService.FindById(carId).Data;
             if (customer.Findex < car.MinFindex)
             {
                 return new ErrorResult(Messages.NotEngouhFindex);

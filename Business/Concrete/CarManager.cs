@@ -77,7 +77,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails().Where(c => c.BrandId == brandId && c.ColorId == colorId).ToList());
         }
 
-        public IDataResult<Car> FindByID(int id)
+        public IDataResult<Car> FindById(int id)
         {
             Car car = new Car();
             if (_carDal.GetAll().Any(c => c.CarId == id))

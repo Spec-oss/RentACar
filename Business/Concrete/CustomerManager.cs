@@ -33,7 +33,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.Deleted);
         }
 
-        public IDataResult<Customer> FindByID(int id)
+        public IDataResult<Customer> FindById(int id)
         {
             Customer customer = new Customer();
             if (_customerDal.GetAll().Any(cs=> cs.CustomerId==id))

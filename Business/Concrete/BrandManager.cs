@@ -32,7 +32,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.Deleted);
         }
 
-        public IDataResult<Brand> FindByID(int id)
+        public IDataResult<Brand> FindById(int id)
         {
             Brand brand = new Brand();
             if (_brandDal.GetAll().Any(b => b.BrandId == id))
