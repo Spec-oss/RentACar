@@ -11,12 +11,10 @@ namespace Business.Abstract
 {
     public interface ICarImageService
     {
+        IResult Add(CarImage carImage, IFormFile file);
+        IResult Delete(CarImage carImage);
+        IResult Update(CarImage carImage, IFormFile file);
         IDataResult<List<CarImage>> GetAll();
-        IResult Add(IFormFile image, CarImage img);
-        IResult Update(IFormFile image, CarImage img);
-        IResult Delete(CarImage img);
-        IDataResult<CarImage> Get(CarImage img);
-        IDataResult<CarImage> FindByID(int Id);
-        IDataResult<List<CarImage>> GetCarListByCarID(int carID);
+        IDataResult<CarImage> GetById(int carId);
     }
 }

@@ -18,137 +18,94 @@ namespace Business.Concrete
     public class CarImageManager : ICarImageService
     {
         ICarImageDal _carImageDal;
-        ICarService _carService;
-        private readonly string DefaultImage = "defaultimage.jpg";
-        public CarImageManager(ICarImageDal carImageDal, ICarService carService)
-        {
-            _carImageDal = carImageDal;
-            _carService = carService;
-        }
 
-        public IResult Add(IFormFile image, CarImage img)
+
+        public CarImageManager(ICarImageDal carimageDal)
         {
-            IResult result = BusinessRules.Run(CheckIfCarIsExists(img.CarId),
-                                           CheckIfFileExtensionValid(image.FileName),
-                                           CheckIfImageNumberLimitForCar(img.CarId));
+            _carImageDal = carimageDal;
+        }
+        //[ValidationAspect(typeof(CarImageValidator))]
+        //[CacheRemoveAspect("ICarImageService.Get")]
+        public IResult Add(CarImage carImage, IFormFile file)
+        {
+            var result = BusinessRules.Run(CheckCarImageCount(carImage.CarId));
+
             if (result != null)
             {
                 return result;
             }
-            img.ImagePath = FileOperationsHelper.Add(image);
-            img.Date = DateTime.Now;
-            _carImageDal.Add(img);
-            return new SuccessResult("Görsel" + Messages.Added);
+
+            carImage.Date = DateTime.Now;
+            carImage.ImagePath = FileOperationsHelper.AddFile(file);
+
+            _carImageDal.Add(carImage);
+
+            return new SuccessResult();
         }
 
-        public IResult Delete(CarImage img)
+
+        //[SecuredOperation("admin,carimage.delete")]
+        //[CacheRemoveAspect("ICarImageService.Get")]
+        public IResult Delete(CarImage carImage)
         {
-            IResult result = BusinessRules.Run(CheckIfImagePathIsExists(img.ImagePath));
-            if (result != null)
+            var image = _carImageDal.Get(c => c.PhotoId == carImage.PhotoId);
+
+            if (image == null)
             {
-                return result;
+                return new ErrorResult();
             }
-            _carImageDal.Delete(img);
-            FileOperationsHelper.Delete(img.ImagePath);
-            return new SuccessResult("Görsel" + Messages.Deleted);
+
+            FileOperationsHelper.DeleteFile(image.ImagePath);
+
+            _carImageDal.Delete(carImage);
+
+            return new SuccessResult();
         }
 
-        public IDataResult<CarImage> FindByID(int Id)
+
+        //[SecuredOperation("admin,carimage.update")]
+        //ValidationAspect(typeof(CarImageValidator))]
+        //[CacheRemoveAspect("ICarImageService.Get")]
+        public IResult Update(CarImage carImage, IFormFile file)
         {
-            CarImage img = new CarImage();
-            if (_carImageDal.GetAll().Any(x => x.PhotoId == Id))
+            var oldImage = _carImageDal.Get(c => c.PhotoId == carImage.PhotoId);
+
+            if (oldImage == null)
             {
-                img = _carImageDal.GetAll().FirstOrDefault(x => x.PhotoId == Id);
+                return new ErrorResult();
             }
-            else Console.WriteLine("Araba görseli bulunamadı.");
-            return new SuccessDataResult<CarImage>(img);
+
+            carImage.Date = DateTime.Now;
+            carImage.ImagePath = FileOperationsHelper.UpdateFile(file, oldImage.ImagePath);
+
+            _carImageDal.Update(carImage);
+
+            return new SuccessResult();
         }
 
-        public IDataResult<CarImage> Get(CarImage img)
-        {
-            return new SuccessDataResult<CarImage>(_carImageDal.Get(x => x.PhotoId == img.PhotoId));
-        }
 
+        //[CacheAspect]
+        //[PerformanceAspect(5)]
         public IDataResult<List<CarImage>> GetAll()
         {
             return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll());
         }
 
-        public IDataResult<List<CarImage>> GetCarListByCarID(int carId)
+
+        //[CacheAspect]
+        //[PerformanceAspect(5)]
+        public IDataResult<CarImage> GetById(int carImageId)
         {
-            if (!_carImageDal.GetAll().Any(x=>x.CarId == carId))
-            {
-                List<CarImage> img = new List<CarImage>
-                {
-                    new CarImage
-                    {
-                        CarId=carId,
-                        ImagePath=DefaultImage
-                    }
-                };
-                return new SuccessDataResult<List<CarImage>>(img);
-            }
-            return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll(x => x.CarId == carId));
+            return new SuccessDataResult<CarImage>(_carImageDal.Get(ci => ci.PhotoId == carImageId));
         }
 
-        public IResult Update(IFormFile image, CarImage img)
-        {
-            IResult result = BusinessRules.Run(CheckIfImageIsExists(img.PhotoId),
-                                           CheckIfFileExtensionValid(image.FileName));
-            if (result != null)
-            {
-                return result;
-            }
-            var carImg = _carImageDal.Get(x => x.PhotoId == img.PhotoId);
-            carImg.Date = DateTime.Now;
-            carImg.ImagePath = FileOperationsHelper.Add(image);
-            FileOperationsHelper.Delete(img.ImagePath);
-            _carImageDal.Update(carImg);
-            return new SuccessResult("Görsel" + Messages.Updated);
-        }
-        private IResult CheckIfCarIsExists(int carId)
-        {
-            if (!_carService.GetAll().Data.Any(c => c.CarId == carId))
-            {
-                return new ErrorResult("Araç" + Messages.NotExist);
-            }
-            return new SuccessResult();
-        }
 
-        private IResult CheckIfFileExtensionValid(string file)
+        // Business Rules Methods
+        private IResult CheckCarImageCount(int carId)
         {
-            if (!Regex.IsMatch(file, @"([A-Za-z0-9\-]+)\.(png|PNG|gif|GIF|jpg|JPG|jpeg|JPEG)"))
+            if (_carImageDal.GetAll(ci => ci.CarId == carId).Count >= 5)
             {
-                return new ErrorResult(Messages.InvalidFileExtension);
-            }
-
-            return new SuccessResult();
-        }
-
-        private IResult CheckIfImagePathIsExists(string path)
-        {
-            if (!_carImageDal.GetAll().Any(c => c.ImagePath == path))
-            {
-                return new ErrorResult("Görsel" + Messages.NotExist);
-            }
-
-            return new SuccessResult();
-        }
-
-        private IResult CheckIfImageNumberLimitForCar(int carId)
-        {
-            if (_carImageDal.GetAll(c => c.CarId == carId).Count == 5)
-            {
-                return new ErrorResult(Messages.ImageNumberLimitExceeded);
-            }
-            return new SuccessResult();
-        }
-
-        private IResult CheckIfImageIsExists(int Id)
-        {
-            if (!_carImageDal.GetAll().Any(c => c.PhotoId == Id))
-            {
-                return new ErrorResult("Görsel" + Messages.NotExist);
+                return new ErrorResult();
             }
             return new SuccessResult();
         }
