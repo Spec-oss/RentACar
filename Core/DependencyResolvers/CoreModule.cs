@@ -19,6 +19,7 @@ namespace Core.DependencyResolvers
             serviceCollection.AddMemoryCache();
             serviceCollection.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             serviceCollection.AddSingleton<ICacheManager, MemoryCacheManager>();
+            serviceCollection.AddLogging();
             //Redis
             //serviceCollection.AddSingleton<ICacheManager, RedisCacheManager>();
         }
