@@ -38,7 +38,7 @@ namespace WebAPI.Controllers
         }
 
 
-        [HttpPost("delete")]
+        [HttpDelete("delete")]
         public IActionResult Delete(CarImage carImage)
         {
             var result = _carimageService.Delete(carImage);
@@ -54,7 +54,7 @@ namespace WebAPI.Controllers
         }
 
 
-        [HttpPost("update")]
+        [HttpPut("update")]
         public IActionResult Update([FromForm] CarImage carImage, [FromForm(Name = "Image")] IFormFile file)
         {
             var result = _carimageService.Update(carImage, file);
