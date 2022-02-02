@@ -24,8 +24,7 @@ namespace Business.Concrete
         {
             _carImageDal = carimageDal;
         }
-        //[ValidationAspect(typeof(CarImageValidator))]
-        //[CacheRemoveAspect("ICarImageService.Get")]
+        
         public IResult Add(CarImage carImage, IFormFile file)
         {
             var result = BusinessRules.Run(CheckCarImageCount(carImage.CarId));
@@ -43,9 +42,6 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-
-        //[SecuredOperation("admin,carimage.delete")]
-        //[CacheRemoveAspect("ICarImageService.Get")]
         public IResult Delete(CarImage carImage)
         {
             var image = _carImageDal.Get(c => c.PhotoId == carImage.PhotoId);
@@ -62,10 +58,6 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-
-        //[SecuredOperation("admin,carimage.update")]
-        //ValidationAspect(typeof(CarImageValidator))]
-        //[CacheRemoveAspect("ICarImageService.Get")]
         public IResult Update(CarImage carImage, IFormFile file)
         {
             var oldImage = _carImageDal.Get(c => c.PhotoId == carImage.PhotoId);
@@ -83,24 +75,16 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-
-        //[CacheAspect]
-        //[PerformanceAspect(5)]
         public IDataResult<List<CarImage>> GetAll()
         {
             return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll());
         }
 
-
-        //[CacheAspect]
-        //[PerformanceAspect(5)]
         public IDataResult<CarImage> GetById(int carImageId)
         {
             return new SuccessDataResult<CarImage>(_carImageDal.Get(ci => ci.PhotoId == carImageId));
         }
 
-
-        // Business Rules Methods
         private IResult CheckCarImageCount(int carId)
         {
             if (_carImageDal.GetAll(ci => ci.CarId == carId).Count >= 5)
