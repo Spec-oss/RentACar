@@ -5,8 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Aspects\Autofac\Logging\**" />
     <Compile Remove="CrossCuttingConcerns\Logging\**" />
+    <EmbeddedResource Remove="Aspects\Autofac\Logging\**" />
     <EmbeddedResource Remove="CrossCuttingConcerns\Logging\**" />
+    <None Remove="Aspects\Autofac\Logging\**" />
     <None Remove="CrossCuttingConcerns\Logging\**" />
   </ItemGroup>
 
